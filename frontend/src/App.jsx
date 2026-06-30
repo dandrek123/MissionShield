@@ -13,6 +13,16 @@ const emptySystemForm = {
     notes: "",
 };
 
+const emptyIncidentForm = {
+    title: "",
+    description: "",
+    severity: "Medium",
+    status: "Open",
+    affected_system: "",
+    reported_by: "",
+    response_notes: "",
+};
+
 function App() {
     const [summary, setSummary] = useState({
         totalSystems: 0,
@@ -26,6 +36,8 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [systemForm, setSystemForm] = useState(emptySystemForm);
     const [systemMessage, setSystemMessage] = useState("");
+    const [incidentForm, setIncidentForm] = useState(emptyIncidentForm);
+    const [incidentMessage, setIncidentMessage] = useState("");
 
     async function loadDashboardData() {
         try {
@@ -90,6 +102,46 @@ function App() {
         } catch (error) {
             console.error("System creation error:", error);
             setSystemMessage("Unable to add system. Check the backend server and try again.");
+        }
+    }
+
+    function handleIncidentChange(event) {
+        const { name, value } = event.target;
+
+        setIncidentForm((currentForm) => ({
+            ...currentForm,
+            [name]: value,
+        }));
+    }
+
+    async function handleIncidentSubmit(event) {
+        event.preventDefault();
+        setIncidentMessage("");
+
+        if (!incidentForm.title.trim()) {
+            setIncidentMessage("Incident title is required.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/api/incidents`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(incidentForm),
+            });
+
+            if (!response.ok) {
+                throw new Error("Unable to add incident.");
+            }
+
+            setIncidentForm(emptyIncidentForm);
+            setIncidentMessage("Cyber incident added successfully.");
+            await loadDashboardData();
+        } catch (error) {
+            console.error("Incident creation error:", error);
+            setIncidentMessage("Unable to add incident. Check the backend server and try again.");
         }
     }
 
@@ -209,6 +261,94 @@ function App() {
                     <div className="form-actions">
                         <button type="submit">Add System</button>
                         {systemMessage && <span>{systemMessage}</span>}
+                    </div>
+                </form>
+            </section>
+
+            <section className="panel form-panel">
+                <div className="panel-header">
+                    <h2>Add Cyber Incident</h2>
+                    <span>Incident response tracking</span>
+                </div>
+
+                <form className="system-form" onSubmit={handleIncidentSubmit}>
+                    <div className="form-grid">
+                        <label>
+                            Incident Title
+                            <input
+                                type="text"
+                                name="title"
+                                placeholder="Suspicious Network Activity"
+                                value={incidentForm.title}
+                                onChange={handleIncidentChange}
+                            />
+                        </label>
+
+                        <label>
+                            Severity
+                            <select name="severity" value={incidentForm.severity} onChange={handleIncidentChange}>
+                                <option>Low</option>
+                                <option>Medium</option>
+                                <option>High</option>
+                                <option>Critical</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Status
+                            <select name="status" value={incidentForm.status} onChange={handleIncidentChange}>
+                                <option>Open</option>
+                                <option>Investigating</option>
+                                <option>Resolved</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Affected System
+                            <input
+                                type="text"
+                                name="affected_system"
+                                placeholder="Communications Server"
+                                value={incidentForm.affected_system}
+                                onChange={handleIncidentChange}
+                            />
+                        </label>
+
+                        <label>
+                            Reported By
+                            <input
+                                type="text"
+                                name="reported_by"
+                                placeholder="SOC Analyst"
+                                value={incidentForm.reported_by}
+                                onChange={handleIncidentChange}
+                            />
+                        </label>
+                    </div>
+
+                    <label>
+                        Description
+                        <textarea
+                            name="description"
+                            placeholder="Describe the suspicious activity, outage, alert, or security concern."
+                            value={incidentForm.description}
+                            onChange={handleIncidentChange}
+                        />
+                    </label>
+
+                    <label>
+                        Response Notes
+                        <textarea
+                            name="response_notes"
+                            placeholder="Add triage notes, containment steps, investigation status, or resolution summary."
+                            value={incidentForm.response_notes}
+                            onChange={handleIncidentChange}
+                        />
+                    </label>
+
+                    <div className="form-actions">
+                        <button type="submit">Add Incident</button>
+                        {incidentMessage && <span>{incidentMessage}</span>}
                     </div>
                 </form>
             </section>
