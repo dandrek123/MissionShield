@@ -241,3 +241,77 @@ td small {
         grid-template-columns: 1fr;
     }
 }
+
+.form-panel {
+    margin-bottom: 24px;
+}
+
+.system-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.system-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #cbd5e1;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.system-form input,
+.system-form select,
+.system-form textarea {
+    width: 100%;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    border-radius: 10px;
+    background: rgba(2, 6, 23, 0.42);
+    color: #f8fafc;
+    padding: 12px;
+    outline: none;
+}
+
+.system-form input:focus,
+.system-form select:focus,
+.system-form textarea:focus {
+    border-color: #38bdf8;
+}
+
+.system-form textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.form-actions button {
+    border: none;
+    border-radius: 10px;
+    background: #2563eb;
+    color: white;
+    padding: 12px 18px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.form-actions button:hover {
+    background: #1d4ed8;
+}
+
+.form-actions span {
+    color: #93c5fd;
+    font-weight: 700;
+}
