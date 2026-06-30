@@ -315,3 +315,33 @@ td small {
     color: #93c5fd;
     font-weight: 700;
 }
+
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.filter-row label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    color: #cbd5e1;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.filter-row select {
+    min-width: 160px;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    border-radius: 10px;
+    background: rgba(2, 6, 23, 0.42);
+    color: #f8fafc;
+    padding: 10px;
+    outline: none;
+}
+
+.filter-row select:focus {
+    border-color: #38bdf8;
+}

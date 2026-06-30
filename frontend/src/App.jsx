@@ -36,8 +36,14 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [systemForm, setSystemForm] = useState(emptySystemForm);
     const [systemMessage, setSystemMessage] = useState("");
+
     const [incidentForm, setIncidentForm] = useState(emptyIncidentForm);
     const [incidentMessage, setIncidentMessage] = useState("");
+
+    const [systemReadinessFilter, setSystemReadinessFilter] = useState("All");
+    const [systemRiskFilter, setSystemRiskFilter] = useState("All");
+    const [incidentSeverityFilter, setIncidentSeverityFilter] = useState("All");
+    const [incidentStatusFilter, setIncidentStatusFilter] = useState("All");
 
     async function loadDashboardData() {
         try {
@@ -144,6 +150,20 @@ function App() {
             setIncidentMessage("Unable to add incident. Check the backend server and try again.");
         }
     }
+
+    const filteredSystems = systems.filter((system) => {
+        const readinessMatches = systemReadinessFilter === "All" || system.readiness === systemReadinessFilter;
+        const riskMatches = systemRiskFilter === "All" || system.cyber_risk === systemRiskFilter;
+
+        return readinessMatches && riskMatches;
+    });
+
+    const filteredIncidents = incidents.filter((incident) => {
+        const severityMatches = incidentSeverityFilter === "All" || incident.severity === incidentSeverityFilter;
+        const statusMatches = incidentStatusFilter === "All" || incident.status === incidentStatusFilter;
+
+        return severityMatches && statusMatches;
+    });
 
     return (
         <main className="app-shell">
@@ -360,7 +380,30 @@ function App() {
                     <div className="panel">
                         <div className="panel-header">
                             <h2>Mission Systems</h2>
-                            <span>{systems.length} tracked</span>
+                            <span>{filteredSystems.length} shown / {systems.length} tracked</span>
+                        </div>
+
+                        <div className="filter-row">
+                            <label>
+                                Readiness
+                                <select value={systemReadinessFilter} onChange={(event) => setSystemReadinessFilter(event.target.value)}>
+                                    <option>All</option>
+                                    <option>Ready</option>
+                                    <option>Limited</option>
+                                    <option>Down</option>
+                                </select>
+                            </label>
+
+                            <label>
+                                Cyber Risk
+                                <select value={systemRiskFilter} onChange={(event) => setSystemRiskFilter(event.target.value)}>
+                                    <option>All</option>
+                                    <option>Low</option>
+                                    <option>Medium</option>
+                                    <option>High</option>
+                                    <option>Critical</option>
+                                </select>
+                            </label>
                         </div>
 
                         <div className="table-wrapper">
@@ -374,7 +417,7 @@ function App() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {systems.map((system) => (
+                                    {filteredSystems.map((system) => (
                                         <tr key={system.id}>
                                             <td>
                                                 <strong>{system.name}</strong>
@@ -401,11 +444,34 @@ function App() {
                     <div className="panel">
                         <div className="panel-header">
                             <h2>Cyber Incidents</h2>
-                            <span>{incidents.length} logged</span>
+                            <span>{filteredIncidents.length} shown / {incidents.length} logged</span>
+                        </div>
+
+                        <div className="filter-row">
+                            <label>
+                                Severity
+                                <select value={incidentSeverityFilter} onChange={(event) => setIncidentSeverityFilter(event.target.value)}>
+                                    <option>All</option>
+                                    <option>Low</option>
+                                    <option>Medium</option>
+                                    <option>High</option>
+                                    <option>Critical</option>
+                                </select>
+                            </label>
+
+                            <label>
+                                Status
+                                <select value={incidentStatusFilter} onChange={(event) => setIncidentStatusFilter(event.target.value)}>
+                                    <option>All</option>
+                                    <option>Open</option>
+                                    <option>Investigating</option>
+                                    <option>Resolved</option>
+                                </select>
+                            </label>
                         </div>
 
                         <div className="incident-list">
-                            {incidents.map((incident) => (
+                            {filteredIncidents.map((incident) => (
                                 <article className="incident-card" key={incident.id}>
                                     <div>
                                         <h3>{incident.title}</h3>
