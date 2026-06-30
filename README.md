@@ -6,6 +6,18 @@ MissionShield is a defense-style cybersecurity operations dashboard built with *
 
 ---
 
+# Screenshots
+
+## Dashboard Overview
+
+![MissionShield Dashboard Overview](screenshots/dashboard1.png)
+
+## Systems and Incidents View
+
+![MissionShield Systems and Incidents](screenshots/dashboard2.png)
+
+---
+
 # Project Highlights
 
 - Defense-style cyber readiness dashboard
