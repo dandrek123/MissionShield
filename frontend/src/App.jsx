@@ -151,6 +151,54 @@ function App() {
         }
     }
 
+    async function handleDeleteSystem(id) {
+        const confirmed = window.confirm("Delete this mission system?");
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/api/systems/${id}`, {
+                method: "DELETE",
+            });
+
+            if (!response.ok) {
+                throw new Error("Unable to delete system.");
+            }
+
+            setSystemMessage("Mission system deleted successfully.");
+            await loadDashboardData();
+        } catch (error) {
+            console.error("System delete error:", error);
+            setSystemMessage("Unable to delete system. Check the backend server and try again.");
+        }
+    }
+
+    async function handleDeleteIncident(id) {
+        const confirmed = window.confirm("Delete this cyber incident?");
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/api/incidents/${id}`, {
+                method: "DELETE",
+            });
+
+            if (!response.ok) {
+                throw new Error("Unable to delete incident.");
+            }
+
+            setIncidentMessage("Cyber incident deleted successfully.");
+            await loadDashboardData();
+        } catch (error) {
+            console.error("Incident delete error:", error);
+            setIncidentMessage("Unable to delete incident. Check the backend server and try again.");
+        }
+    }
+
     const filteredSystems = systems.filter((system) => {
         const readinessMatches = systemReadinessFilter === "All" || system.readiness === systemReadinessFilter;
         const riskMatches = systemRiskFilter === "All" || system.cyber_risk === systemRiskFilter;
@@ -414,6 +462,7 @@ function App() {
                                         <th>Readiness</th>
                                         <th>Cyber Risk</th>
                                         <th>Team</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -434,6 +483,11 @@ function App() {
                                                 </span>
                                             </td>
                                             <td>{system.assigned_team || "Unassigned"}</td>
+                                            <td>
+                                                <button className="delete-button" type="button" onClick={() => handleDeleteSystem(system.id)}>
+                                                    Delete
+                                                </button>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -486,6 +540,10 @@ function App() {
                                     </div>
 
                                     <small>Affected system: {incident.affected_system || "Unknown"}</small>
+
+                                    <button className="delete-button incident-delete" type="button" onClick={() => handleDeleteIncident(incident.id)}>
+                                        Delete Incident
+                                    </button>
                                 </article>
                             ))}
                         </div>

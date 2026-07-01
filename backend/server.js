@@ -25,6 +25,7 @@ app.get("/api/systems", (req, res) => {
     });
 });
 
+
 app.post("/api/systems", (req, res) => {
     const {
         name,
@@ -65,6 +66,22 @@ app.post("/api/systems", (req, res) => {
     );
 });
 
+app.delete("/api/systems/:id", (req, res) => {
+    const { id } = req.params;
+
+    db.run("DELETE FROM systems WHERE id = ?", [id], function (error) {
+        if (error) {
+            return res.status(500).json({ error: error.message });
+        }
+
+        if (this.changes === 0) {
+            return res.status(404).json({ error: "System not found" });
+        }
+
+        res.json({ message: "System deleted successfully" });
+    });
+});
+
 app.get("/api/incidents", (req, res) => {
     db.all("SELECT * FROM incidents ORDER BY created_at DESC", [], (error, rows) => {
         if (error) {
@@ -74,6 +91,7 @@ app.get("/api/incidents", (req, res) => {
         res.json(rows);
     });
 });
+
 
 app.post("/api/incidents", (req, res) => {
     const {
@@ -113,6 +131,22 @@ app.post("/api/incidents", (req, res) => {
             });
         }
     );
+});
+
+app.delete("/api/incidents/:id", (req, res) => {
+    const { id } = req.params;
+
+    db.run("DELETE FROM incidents WHERE id = ?", [id], function (error) {
+        if (error) {
+            return res.status(500).json({ error: error.message });
+        }
+
+        if (this.changes === 0) {
+            return res.status(404).json({ error: "Incident not found" });
+        }
+
+        res.json({ message: "Incident deleted successfully" });
+    });
 });
 
 
