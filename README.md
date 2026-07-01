@@ -36,9 +36,9 @@ MissionShield is a defense-style cybersecurity operations dashboard built with *
 # Features
 
 - Track mission systems and readiness status
-- Add new mission systems from the dashboard
+- Add and delete mission systems from the dashboard
 - Track cyber incidents and response notes
-- Add new cyber incidents from the dashboard
+- Add and delete cyber incidents from the dashboard
 - View total systems, ready systems, open incidents, and high-risk incidents
 - Filter systems by readiness and cyber risk
 - Filter incidents by severity and status
@@ -97,12 +97,15 @@ http://localhost:5002
 ## Routes
 
 ```text
-GET  /                     API health check
-GET  /api/summary          Dashboard summary data
-GET  /api/systems          List mission systems
-POST /api/systems          Create a mission system
-GET  /api/incidents        List cyber incidents
-POST /api/incidents        Create a cyber incident
+GET    /                     API health check
+GET    /api/summary          Dashboard summary data
+GET    /api/systems          List mission systems
+POST   /api/systems          Create a mission system
+DELETE /api/systems/:id      Delete a mission system
+GET    /api/incidents        List cyber incidents
+POST   /api/incidents        Create a cyber incident
+DELETE /api/incidents/:id    Delete a cyber incident
+
 ```
 
 ---
@@ -214,21 +217,21 @@ Affected System: Radar Control Node
 - Backend API with Express
 - SQLite database persistence
 - React dashboard frontend
-- Mission system creation form
-- Cyber incident creation form
+- Mission system creation and deletion
+- Cyber incident creation and deletion
 - Dashboard summary cards
 - System readiness filtering
 - Cyber risk filtering
 - Incident severity filtering
 - Incident status filtering
-- Live data refresh after form submission
+- Live data refresh after form submission and delete actions
 
 ---
 
 # Roadmap
 
-- Edit and delete mission systems
-- Edit and delete cyber incidents
+- Edit mission systems
+- Edit cyber incidents
 - CSV export for systems and incidents
 - Printable incident reports
 - Dashboard charts
